@@ -12,7 +12,7 @@ in_dir <- here('input')
 out_dir <- here('output')
 fig_dir <- here('figures')
 
-coef_tables <- fread(here(out_dir,'112_coef_table.csv'))
+coef_tables <- fread(here(out_dir,'111_coef_table.csv'))
 
 setorder(coef_tables,sex)
 
