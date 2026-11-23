@@ -14,15 +14,15 @@ Because the underlying individual-level data cannot be shared publicly, the prim
 
 No data are stored in this repository due to data protection regulations governing Finnish administrative registers. The analysis uses pseudonymized individual-level data maintained and linked under Statistics Finland permission **TK-53-1519-09**, combining:
 
-1. **Statistics Finland (FOLK modules):** Annual sociodemographic records (`FOLK_perus`), household income and composition (`FOLK_askun`), international migration histories (`FOLK_MUUTT_C`), and retrospective socioeconomic status (`retroses.dta`).
+1. **Statistics Finland (FOLK modules):** Annual sociodemographic records (`FOLK_perus`), household income and composition (`FOLK_askun`), international migration histories (`FOLK_MUUTT_C`), and retrospective socioeconomic status (`retroses.dta`). The latter is a custom variable we constructed by looking at SES trajectories of individuals included in the sample to determine the last SES record for individuals who retire or exit the labor force.
 2. **Finnish Institute for Health and Welfare (THL):** Care Register for Health Care (HILMO) specialized inpatient and outpatient diagnosis records (`u1259_hilmo_paa_*.dta`).
 3. **Social Insurance Institution of Finland (Kela):** Special reimbursement rights for long-term prescription medications (`u1259_laakekorvausoikeud_korj_s.dta`).
 
-Researchers interested in replicating the study can apply for access to the register data through [Statistics Finland](https://stat.fi/tup/mikroaineistot/index_en.html) (remote access environment, Fiona).
+Researchers interested in replicating the study can apply for access to the register data through [Statistics Finland](https://stat.fi/en/services/services-for-researchers/instructions-for-researchers/how-do-you-gain-access-to-datasets).
 
 ## Expected Directory Structure
 
-The scripts use the `here` package with `here::i_am("R/<script>.R")` and expect the following project directory layout alongside the external register directories on the Statistics Finland remote access system:
+The scripts use the `here` package with `here::i_am("R/<script>.R")` to locate files and expect the following project directory layout alongside the external register directories on the Statistics Finland remote access system:
 
 project_root/
 ├── R/                  # All R scripts in this repository (001a_*.R – 210_*.R)
@@ -36,17 +36,7 @@ project_root/
 
 ### External Register Data Paths
 
-Scripts `001a`–`009` read raw Stata (`.dta`) files in chunks from the following external directories (reflecting the Statistics Finland remote access environment; update `in_dir` at the top of each script if your paths differ):
-
-| Script(s) | Default `in_dir` / Source Path | Files Read |
-| --- | --- | --- |
-| `001a`, `001b` | `W:/Non-continuously updated folk modules/FOLK_MUUTT_C` | International migration records (`*.dta`) |
-| `002a`, `002b` | `D:/ready-made/FOLK_perus_8800a` | FOLK basic module, 1988–2000 (latest `*.dta`) |
-| `004` | `D:/d31/external/u1259_al5_thl_aineisto_hilmot` | THL HILMO visits (`u1259_hilmo_paa_*.dta`, excl. `1970_1986`) |
-| `006` | `D:/d31/external/u1259_al5_kela_aineisto` | Kela medication reimbursements (`u1259_laakekorvausoikeud_korj_s.dta`) |
-| `008` | `D:/ready-made/FOLK_perus_0110a`, `FOLK_perus_11a` | FOLK basic modules, 2001–2010 and 2011+ (latest `*.dta`) |
-| `009` | `D:/ready-made/FOLK_askun_0110a`, `FOLK_askun_11a` | FOLK household modules, 2001–2010 and 2011+ (latest `*.dta`) |
-| `010` | `data/retroses.dta` | Retrospective SES file |
+Scripts `001a`–`009` read raw Stata (`.dta`) files in chunks from the appropriate directories (reflecting the Statistics Finland remote access environment; update `in_dir` at the top of each script if your paths differ).
 
 ## Software Requirements
 
@@ -65,11 +55,11 @@ Scripts are numbered sequentially in three stages: data preparation (`001`–`01
 * `001a_read_mig_histories.R` / `001b_read_mig_histories_native.R`: Extract and clean international immigration and emigration histories through 2019 for foreign-born and Finnish-born residents, excluding individuals with >6 migration records.
 * `002a_read_foreign_data.R` / `002b_read_native_data.R`: Extract baseline FOLK records (1988–2000) for foreign-born immigrants arriving in 1990–2000 and an initial sample of native-born Finns.
 * `003_combine_data.R`: Combine foreign-born and native-born sample rosters into a single ID list.
-* `004_read_healthcare_data.R` / `005_clean_visits.R`: Read THL HILMO specialized healthcare episodes, filter to sample IDs, and parse visit dates and ICD-9/ICD-10 codes. *(Note: `005_clean_visits_old.R` is a legacy CSV-based version retained for reference and is not part of the active pipeline.)*
+* `004_read_healthcare_data.R` / `005_clean_visits.R`: Read THL HILMO specialized healthcare episodes, filter to sample IDs, and parse visit dates and ICD-9/ICD-10 codes.
 * `006_read_med_reimbursements_data.R`: Read Kela special medication reimbursement rights (1990+) and map reimbursement codes to the study's chronic conditions.
 * `007_create_health_longitudinal.R`: Combine HILMO diagnoses and Kela reimbursement rights to determine the earliest diagnosis date per individual and condition.
 * `008_read_basic_data.R` / `009_read_household_data.R` / `010_read_ses_data.R`: Extract longitudinal demographic, household disposable income, and retrospective occupational SES data (2001–2019) for the study sample.
-* `011_create_model_data.R`: Merge all register modules, apply study eligibility criteria (alive and residing in Finland on Dec 31, 2004; ages 25–84; 2004–2019), construct covariates (SES, equivalized/household income quintiles, employment status, regions of birth), and draw the final 200,000 native-born sample (`set.seed(42)`).
+* `011_create_model_data.R`: Merge all register modules, apply study eligibility criteria (alive and residing in Finland on Dec 31, 2004; ages 25–84; 2004–2019), construct covariates (SES, equivalized/household income quintiles, employment status, regions of birth), and draw the final 200,000 native-born sample.
 * `012_health_eligibility.R`: Identify condition-specific washout eligibility (no diagnosis or reimbursement record during 2000–2004).
 
 ### 2. Statistical Models (`101`–`113`)
