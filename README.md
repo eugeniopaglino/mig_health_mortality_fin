@@ -24,6 +24,7 @@ Researchers interested in replicating the study can apply for access to the regi
 
 The scripts use the `here` package with `here::i_am("R/<script>.R")` to locate files and expect the following project directory layout alongside the external register directories on the Statistics Finland remote access system:
 
+```text
 project_root/
 ├── R/                  # All R scripts in this repository (001a_*.R – 210_*.R)
 ├── data/               # Local auxiliary input files (not included in repo)
@@ -33,6 +34,7 @@ project_root/
 ├── figures/            # Exploratory and diagnostic .svg plots (created by scripts)
 ├── tables/             # Formatted .docx tables for the manuscript and supplement (created by scripts)
 └── LICENSE
+```
 
 ### External Register Data Paths
 
