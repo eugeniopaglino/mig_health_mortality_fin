@@ -4,8 +4,6 @@ Replication and analysis code for:
 
 > Paglino, E., Lyytinen, M. K. K., Tarkiainen, L., & Martikainen, P. *Immigrant Health, Migration, and Mortality in a Nordic Welfare State*.
 
-An archival copy of the code is also available on OSF at [https://osf.io/jzy2p](https://osf.io/jzy2p).
-
 ## Overview
 
 This repository contains the R scripts used to construct the analytical dataset, fit survival and sensitivity models, and generate all tables for our study of immigrant–native differentials in all-cause mortality and six chronic health conditions (arthritis, asthma, diabetes, heart disease, hypertension, and malignant neoplasms) in Finland between 2005 and 2019. It also includes the code for testing the salmon bias hypothesis by modeling return and secondary out-migration as a function of chronic disease diagnosis.
